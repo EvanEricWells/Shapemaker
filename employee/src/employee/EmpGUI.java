@@ -1,30 +1,26 @@
 package employee;
 
-
 import java.text.*;
 import javax.swing.*;
-
-
 
 /**
  *
  * @author evan5090
  */
 public class EmpGUI extends javax.swing.JFrame {
-    
+
     Employee emp[];
-    int size=0;
+    int size = 0;
     NumberFormat nf;
+
     /**
      * Creates new form EmpGUI
      */
     public EmpGUI() {
         initComponents();
-        emp=new Employee[10];
-        nf=NumberFormat.getCurrencyInstance();
+        emp = new Employee[10];
+        nf = NumberFormat.getCurrencyInstance();
     }
-    
-    
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -47,9 +43,9 @@ public class EmpGUI extends javax.swing.JFrame {
         btnadd = new javax.swing.JButton();
         btnquit = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
-        tblEmployee = new javax.swing.JTable();
+        tblEmp = new javax.swing.JTable();
         lblTotal = new javax.swing.JLabel();
-        txtTotal = new javax.swing.JTextField();
+        lbltotalpay = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -79,7 +75,7 @@ public class EmpGUI extends javax.swing.JFrame {
 
         btnquit.setText("Quit");
 
-        tblEmployee.setModel(new javax.swing.table.DefaultTableModel(
+        tblEmp.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null},
                 {null, null},
@@ -93,14 +89,14 @@ public class EmpGUI extends javax.swing.JFrame {
                 "Name", "Pay"
             }
         ));
-        tblEmployee.getTableHeader().setReorderingAllowed(false);
-        jScrollPane1.setViewportView(tblEmployee);
+        tblEmp.getTableHeader().setReorderingAllowed(false);
+        jScrollPane1.setViewportView(tblEmp);
 
         lblTotal.setText("Total Pay:");
 
-        txtTotal.setEditable(false);
-        txtTotal.setBackground(new java.awt.Color(0, 0, 0));
-        txtTotal.setForeground(new java.awt.Color(255, 255, 255));
+        lbltotalpay.setEditable(false);
+        lbltotalpay.setBackground(new java.awt.Color(0, 0, 0));
+        lbltotalpay.setForeground(new java.awt.Color(255, 255, 255));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -112,7 +108,7 @@ public class EmpGUI extends javax.swing.JFrame {
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(lblTotal)
                         .addGap(18, 18, 18)
-                        .addComponent(txtTotal, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(lbltotalpay, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 159, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -166,7 +162,7 @@ public class EmpGUI extends javax.swing.JFrame {
                 .addGap(38, 38, 38)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblTotal)
-                    .addComponent(txtTotal, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(lbltotalpay, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(43, Short.MAX_VALUE))
         );
 
@@ -182,19 +178,39 @@ public class EmpGUI extends javax.swing.JFrame {
         String nm, type;
         int hours;
         double rate;
-        try{
-            nm  = txtname.getText();
+        try {
+            nm = txtname.getText();
             hours = Integer.parseInt(txthours.getText());
             rate = Double.parseDouble(txtrate.getText());
             type = buttonGroup1.getSelection().getActionCommand();
-        }catch (Exception e){
+
+        } catch (Exception e) {
             JOptionPane.showMessageDialog(this, "Must fill out form correctly");
             return;
         }
-        if(type.equals("FT")) temp= new FullTimeEmployee();
-        else temp = new PartTimeEmployee();
-    }//GEN-LAST:event_btnaddActionPerformed
+        if (type.equals("FT")) {
+            temp = new FullTimeEmployee();
+        } else {
+            temp = new PartTimeEmployee();
+        }
+        if (temp.setName(nm)&& temp.setHours(hours) && temp.setRate(rate)) {
+             emp[size] = temp;
+            tblEmp.setValueAt(temp.getName(), size, 0);
+            tblEmp.setValueAt(nf.format(temp.getPay()), size, 1);
+            size++;
+            lbltotalpay.setText(nf.format(Employee.getTotalPay));
+            clearform();
+            return;
+        }
 
+    }//GEN-LAST:event_btnaddActionPerformed
+    
+    public void clearform(){
+            txtname.setText("");
+            txtrate.setText("");
+            txthours.setText("");
+            buttonGroup1.clearSelection();
+    }
     /**
      * @param args the command line arguments
      */
@@ -241,8 +257,8 @@ public class EmpGUI extends javax.swing.JFrame {
     private javax.swing.JLabel lblhours;
     private javax.swing.JLabel lblname;
     private javax.swing.JLabel lblrate;
-    private javax.swing.JTable tblEmployee;
-    private javax.swing.JTextField txtTotal;
+    private javax.swing.JTextField lbltotalpay;
+    private javax.swing.JTable tblEmp;
     private javax.swing.JTextField txthours;
     private javax.swing.JTextField txtname;
     private javax.swing.JTextField txtrate;
