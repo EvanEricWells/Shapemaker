@@ -93,6 +93,11 @@ public class ShapesGUI extends javax.swing.JFrame {
         });
 
         btnresize.setText("Resize");
+        btnresize.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnresizeActionPerformed(evt);
+            }
+        });
 
         btnquit.setText("Quit");
         btnquit.addActionListener(new java.awt.event.ActionListener() {
@@ -208,7 +213,10 @@ public class ShapesGUI extends javax.swing.JFrame {
     }//GEN-LAST:event_btnrektActionPerformed
 
     private void btntriActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btntriActionPerformed
-        
+        erase();
+        s=new Triangle(0,0,50,50);
+        s.draw(p);
+        txtarea.setText(s.toString());
     }//GEN-LAST:event_btntriActionPerformed
 
     private void btnquitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnquitActionPerformed
@@ -221,6 +229,14 @@ public class ShapesGUI extends javax.swing.JFrame {
         s.draw(p);
         txtarea.setText(s.toString());
     }//GEN-LAST:event_btnwheelActionPerformed
+
+    private void btnresizeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnresizeActionPerformed
+        double x = Double.parseDouble(JOptionPane.showInputDialog(this, "Resize by a factor of?:","0"));
+        erase();
+        s.stretchBy(x);
+        s.draw(p);
+        txtarea.setText(s.toString());
+    }//GEN-LAST:event_btnresizeActionPerformed
 
     /**
      * @param args the command line arguments
